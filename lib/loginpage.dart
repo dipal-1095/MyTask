@@ -4,8 +4,21 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loginusingsharedpref/navigationbar.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
+class UserEmailProvider extends ChangeNotifier {
+  String _email=' ';
+
+  String get email => _email;
+
+  void setEmail(String email) {
+    _email = email;
+    notifyListeners();
+  }
+}
+
 
 class Loginpage extends StatefulWidget with WidgetsBindingObserver{
   const Loginpage({super.key});
@@ -57,20 +70,35 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
   Future<void> login(email, password) async {
     try {
       Response response = await post(
-          Uri.parse('https://reqres.in/api/register'),
-          body: {'email': email, 'password': password});
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-        print('Login token' + data.toString());
+        Uri.parse('https://reqres.in/api/login'), // Assuming this is a login endpoint
+        body: {'email': email, 'password': password},
+      );
 
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        await pref.setString("login", data['token'],  );
-        print('Login successfully');
-        var push = Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => NavigationMenu()));
+      if (response.statusCode == 200) { // Assuming successful login returns status code 200
+        var data = jsonDecode(response.body);
+
+        if (data.containsKey('token')) { // Assuming your response contains a token
+          final userToken = data['token'] as String;
+          Provider.of<UserEmailProvider>(context, listen: false).setEmail(email);
+
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          await pref.setString("login", userToken);
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NavigationMenu()));
+        } else {
+          // Handle case when token is not found in the response
+          print('Token not found in response');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('An error occurred during login. Please try again later.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } else {
-        print('Login Failed');
-        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        // Handle case when login request fails
+        print('Login failed');
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login failed. Please check your credentials.'),
             backgroundColor: Colors.red,
@@ -78,9 +106,9 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
         );
       }
     } catch (e) {
-      print(e.toString());
-
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+      // Handle any other errors
+      print('Error during login: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occurred. Please try again later.'),
           backgroundColor: Colors.red,
@@ -231,3 +259,5 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
     );
   }
 }
+
+

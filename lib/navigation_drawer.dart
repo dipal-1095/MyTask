@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:loginusingsharedpref/loginpage.dart';
 import 'package:loginusingsharedpref/main.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NavDrawer extends StatelessWidget {
@@ -7,6 +9,7 @@ class NavDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserEmail = Provider.of<UserEmailProvider>(context).email;
     return Drawer(
       child: ListView(
         children: [
@@ -18,7 +21,7 @@ class NavDrawer extends StatelessWidget {
               ),
               child: UserAccountsDrawerHeader(
                 decoration: BoxDecoration(color: Colors.amber),
-                accountEmail: Text('dipu@gmail.com',
+                accountEmail: Text(UserEmail,
                   style: TextStyle(fontFamily: 'poppins', fontSize: 15),
                 ),
                 currentAccountPictureSize: Size.square(70),

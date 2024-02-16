@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loginusingsharedpref/LifeCycleManager.dart';
 import 'package:loginusingsharedpref/locator.dart';
+import 'package:provider/provider.dart';
 import 'loginpage.dart';
 
 void main() {
@@ -14,14 +15,17 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LifeCycleManager(
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home:Scaffold(
-              body: const Loginpage(),
-              // Ensure 'Loginpage' is properly defined
-          ),
-        initialRoute: '/login',
-        routes: {'/login':(context)=>Loginpage()},),
+      child: ChangeNotifierProvider(
+        create: (context) => UserEmailProvider(),
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home:Scaffold(
+                body: const Loginpage(),
+                // Ensure 'Loginpage' is properly defined
+            ),
+          initialRoute: '/login',
+          routes: {'/login':(context)=>Loginpage()},),
+      ),
     );
   }
 }
