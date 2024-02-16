@@ -52,7 +52,10 @@ class NavDrawer extends StatelessWidget {
             onTap: () async {
               SharedPreferences pref = await SharedPreferences.getInstance();
               await pref.clear();
-              var push = Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
+              Navigator.pop(context,true);
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Login()));
+              emailController.clear();
+              passwordController.clear();
             },
           ),
         ],

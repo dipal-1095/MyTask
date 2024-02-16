@@ -21,22 +21,25 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     Locator<backgroundFetchProcess>(),
   ];
   void initState(){
-    super.initState();
     WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   void dispose(){
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     servicesToManage.forEach((service) {
-      if(service== AppLifecycleState.resumed){
+      if(state == AppLifecycleState.resumed){
         service.start();
       }
       else{
+        service.stop();
+      }
+      if(state == AppLifecycleState.detached){
         service.stop();
       }
     });

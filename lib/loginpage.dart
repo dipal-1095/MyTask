@@ -62,11 +62,6 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
     super.dispose();
   }
 
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('state = $state');
-  }
-
-
   Future<void> login(email, password) async {
     try {
       Response response = await post(
@@ -83,8 +78,9 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
 
           SharedPreferences pref = await SharedPreferences.getInstance();
           await pref.setString("login", userToken);
-
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => NavigationMenu()));
+          emailController.clear();
+          passwordController.clear();
         } else {
           // Handle case when token is not found in the response
           print('Token not found in response');
