@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class UserEmailProvider extends ChangeNotifier {
-  String _email=' ';
+  String _email = ' ';
 
   String get email => _email;
 
@@ -19,15 +19,14 @@ class UserEmailProvider extends ChangeNotifier {
   }
 }
 
-
-class Loginpage extends StatefulWidget with WidgetsBindingObserver{
+class Loginpage extends StatefulWidget with WidgetsBindingObserver {
   const Loginpage({super.key});
 
   @override
   State<Loginpage> createState() => _LoginpageState();
 }
 
-class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
+class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   var _isobscure;
@@ -39,7 +38,6 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
   }
 
   void initState() {
-
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _isobscure = true;
@@ -65,20 +63,23 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
   Future<void> login(email, password) async {
     try {
       Response response = await post(
-        Uri.parse('https://reqres.in/api/login'), // Assuming this is a login endpoint
+        Uri.parse(
+            'https://reqres.in/api/register'), // Assuming this is a login endpoint
         body: {'email': email, 'password': password},
       );
 
-      if (response.statusCode == 200) { // Assuming successful login returns status code 200
+      if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
 
-        if (data.containsKey('token')) { // Assuming your response contains a token
+        if (data.containsKey('token')) {
           final userToken = data['token'] as String;
-          Provider.of<UserEmailProvider>(context, listen: false).setEmail(email);
+          Provider.of<UserEmailProvider>(context, listen: false)
+              .setEmail(email);
 
           SharedPreferences pref = await SharedPreferences.getInstance();
           await pref.setString("login", userToken);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NavigationMenu()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => NavigationMenu()));
           emailController.clear();
           passwordController.clear();
         } else {
@@ -86,7 +87,8 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
           print('Token not found in response');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('An error occurred during login. Please try again later.'),
+              content: Text(
+                  'An error occurred during login. Please try again later.'),
               backgroundColor: Colors.red,
             ),
           );
@@ -164,7 +166,7 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
                             hintText: 'E-mail',
                             labelText: "E-mail",
                             errorText:
-                                _emailvalidate ? "Please enter email" : null,
+                                _emailvalidate ? "Please Enter Email" : null,
                           ),
                         ),
                       ),
@@ -178,25 +180,26 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
                           keyboardType: TextInputType.visiblePassword,
                           controller: passwordController,
                           decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(width: 1.5),
-                              ),
-                              prefixIcon: IconButton(
-                                icon: _isobscure
-                                    ? Icon(Icons.visibility_off)
-                                    : Icon(Icons.visibility),
-                                onPressed: () {
-                                  setState(() {
-                                    _isobscure = !_isobscure;
-                                  });
-                                },
-                              ),
-                              hintText: 'Password',
-                              labelText: "Password",
-                              errorText: _passwordvalidate
-                                  ? "Please enter password"
-                                  : null),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide: BorderSide(width: 1.5),
+                            ),
+                            prefixIcon: IconButton(
+                              icon: _isobscure
+                                  ? Icon(Icons.visibility_off)
+                                  : Icon(Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  _isobscure = !_isobscure;
+                                });
+                              },
+                            ),
+                            hintText: 'Password',
+                            labelText: "Password",
+                            errorText: _passwordvalidate
+                                ? "Please Enter Password"
+                                : null,
+                          ),
                         ),
                       ),
                     ),
@@ -207,26 +210,27 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
                         onPressed: () {
                           setState(() {
                             if (emailController.text.isEmpty) {
-                              _emailvalidate = true;
-                            }
-                            if (passwordController.text.isEmpty) {
-                              _passwordvalidate = true;
-                            } else if (!validateEmail(emailController.text)) {
-                              // If email is not valid
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Please enter a valid email.'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            } else if (emailController.text.isEmpty &&
-                                passwordController.text.isEmpty) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text("Please Enter Data!"),
-                                backgroundColor: Colors.red,
-                              ));
+                              if (passwordController.text.isEmpty) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar((SnackBar(
+                                  content: Text("Please Enter Data"),
+                                )));
+                              } else {
+                                _emailvalidate = true;
+                              }
+                            } else if (passwordController.text.isEmpty) {
+                              if (emailController.text.isEmpty) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar((SnackBar(
+                                  content: Text("Please Enter Data"),
+                                )));
+                              } else {
+                                _passwordvalidate = true;
+                              }
                             } else {
+                              if(!validateEmail(emailController.text)){
+                                ScaffoldMessenger.of(context).showSnackBar((SnackBar(content: Text('Please Enter Valid Email'),)));
+                              }
                               // If both email and password are entered and email is valid
                               login(emailController.text.toString(),
                                   passwordController.text.toString());
@@ -255,5 +259,3 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver{
     );
   }
 }
-
-
