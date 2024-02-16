@@ -54,8 +54,6 @@ class NavDrawer extends StatelessWidget {
               await pref.clear();
               Navigator.pop(context,true);
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> Login()));
-              emailController.clear();
-              passwordController.clear();
             },
           ),
         ],
