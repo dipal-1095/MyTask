@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loginusingsharedpref/navigationbar.dart';
+import 'package:loginusingsharedpref/themes/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -89,7 +89,7 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver {
             SnackBar(
               content: Text(
                   'An error occurred during login. Please try again later.'),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.errorColor,
             ),
           );
         }
@@ -99,7 +99,7 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login failed. Please check your credentials.'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColors.errorColor,
           ),
         );
       }
@@ -109,7 +109,7 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occurred. Please try again later.'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.errorColor,
         ),
       );
     }
@@ -119,137 +119,144 @@ class _LoginpageState extends State<Loginpage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Colors.orange.shade50,
-      body: SingleChildScrollView(
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 20,
-                shadowColor: Colors.grey.shade800,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Login Here..',
-                        style: TextStyle(
-                            color: Colors.amber.shade600,
-                            fontSize: 30,
-                            fontFamily: 'Pacifico'),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 5.0),
-                      child: Container(
-                        child: TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(
-                                width: 1.5,
-                              ),
-                            ),
-                            prefixIcon: Icon(Icons.email),
-                            hintText: 'E-mail',
-                            labelText: "E-mail",
-                            errorText:
-                                _emailvalidate ? "Please Enter Email" : null,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 5.0),
-                      child: Container(
-                        child: TextField(
-                          obscureText: _isobscure,
-                          keyboardType: TextInputType.visiblePassword,
-                          controller: passwordController,
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(width: 1.5),
-                            ),
-                            prefixIcon: IconButton(
-                              icon: _isobscure
-                                  ? Icon(Icons.visibility_off)
-                                  : Icon(Icons.visibility),
-                              onPressed: () {
-                                setState(() {
-                                  _isobscure = !_isobscure;
-                                });
-                              },
-                            ),
-                            hintText: 'Password',
-                            labelText: "Password",
-                            errorText: _passwordvalidate
-                                ? "Please Enter Password"
-                                : null,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 5.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            if (emailController.text.isEmpty) {
-                              if (passwordController.text.isEmpty) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar((SnackBar(
-                                  content: Text("Please Enter Data"),
-                                )));
-                              } else {
-                                _emailvalidate = true;
-                              }
-                            } else if (passwordController.text.isEmpty) {
-                              if (emailController.text.isEmpty) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar((SnackBar(
-                                  content: Text("Please Enter Data"),
-                                )));
-                              } else {
-                                _passwordvalidate = true;
-                              }
-                            } else {
-                              if(!validateEmail(emailController.text)){
-                                ScaffoldMessenger.of(context).showSnackBar((SnackBar(content: Text('Please Enter Valid Email'),)));
-                              }
-                              // If both email and password are entered and email is valid
-                              login(emailController.text.toString(),
-                                  passwordController.text.toString());
-                            }
-                          });
-                        },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: AppColors.primaryColor,
+        scaffoldBackgroundColor: AppColors.backgroundColor,
+      ),
+      home: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SingleChildScrollView(
+          child: Container(
+            width: screenWidth,
+            height: screenHeight,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  elevation: 20,
+                  shadowColor: Colors.grey.shade800,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'LOGIN',
+                          'Login Here..',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              color: AppColors.buttonBackgroundColor,
+                              fontSize: 30,
+                              fontFamily: 'Pacifico'),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            fixedSize: Size(400, 35),
-                            backgroundColor: Colors.amber),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        child: Container(
+                          child: TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            controller: emailController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(
+                                  width: 1.5,
+                                ),
+                              ),
+                              prefixIcon: Icon(Icons.email),
+                              hintText: 'E-mail',
+                              labelText: "E-mail",
+                              errorText:
+                                  _emailvalidate ? "Please Enter Email" : null,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        child: Container(
+                          child: TextField(
+                            obscureText: _isobscure,
+                            keyboardType: TextInputType.visiblePassword,
+                            controller: passwordController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(width: 1.5),
+                              ),
+                              prefixIcon: IconButton(
+                                icon: _isobscure
+                                    ? Icon(Icons.visibility_off)
+                                    : Icon(Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    _isobscure = !_isobscure;
+                                  });
+                                },
+                              ),
+                              hintText: 'Password',
+                              labelText: "Password",
+                              errorText: _passwordvalidate
+                                  ? "Please Enter Password"
+                                  : null,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 5.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              if (emailController.text.isEmpty) {
+                                if (passwordController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar((SnackBar(
+                                    content: Text("Please Enter Data"),
+                                  )));
+                                } else {
+                                  _emailvalidate = true;
+                                }
+                              } else if (passwordController.text.isEmpty) {
+                                if (emailController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar((SnackBar(
+                                    content: Text("Please Enter Data"),
+                                  )));
+                                } else {
+                                  _passwordvalidate = true;
+                                }
+                              } else {
+                                if(!validateEmail(emailController.text)){
+                                  ScaffoldMessenger.of(context).showSnackBar((SnackBar(content: Text('Please Enter Valid Email'),)));
+                                }
+                                // If both email and password are entered and email is valid
+                                login(emailController.text.toString(),
+                                    passwordController.text.toString());
+                              }
+                            });
+                          },
+                          child: Text(
+                            'LOGIN',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                              fixedSize: Size(400, 35),
+                              backgroundColor: AppColors.buttonBackgroundColor),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
