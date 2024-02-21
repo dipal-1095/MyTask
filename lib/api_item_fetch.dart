@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:loginusingsharedpref/api_data_detail.dart';
+import 'package:loginusingsharedpref/themes/colors.dart';
 
 class ApiDataItemFetch extends StatefulWidget {
   const ApiDataItemFetch({Key? key}) : super(key: key);
@@ -87,7 +88,7 @@ class _ApiDataItemState extends State<ApiDataItemFetch> {
             'ItemDetails',
             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          backgroundColor: Colors.amber,
+          backgroundColor: AppColors.appBarColor,
         ),
         body: Container(
           width: screenWidth,
@@ -163,7 +164,7 @@ class _ApiDataItemState extends State<ApiDataItemFetch> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
-          color: Colors.orange.shade100,
+          color: AppColors.photoBackgroundColor
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

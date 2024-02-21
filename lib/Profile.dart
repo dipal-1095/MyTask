@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loginusingsharedpref/themes/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'navigation_drawer.dart';
 
@@ -38,7 +39,7 @@ class _ProfileState extends State<Profile> {
             'Profile',
             style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.amber,
+          backgroundColor: AppColors.appBarColor,
         ),
         body: SafeArea(
           child: Container(

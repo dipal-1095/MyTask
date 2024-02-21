@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loginusingsharedpref/api_item_fetch.dart';
+import 'package:loginusingsharedpref/themes/colors.dart';
 
 class ApiDataDetail extends StatelessWidget {
   const ApiDataDetail({super.key, required this.item});
@@ -13,7 +14,7 @@ class ApiDataDetail extends StatelessWidget {
           'Item',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Colors.amber,
+        backgroundColor: AppColors.appBarColor,
       ),
       body: SingleChildScrollView(
         child: Column(

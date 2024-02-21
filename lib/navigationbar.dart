@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loginusingsharedpref/Profile.dart';
 import 'package:loginusingsharedpref/api_item_fetch.dart';
+import 'package:loginusingsharedpref/themes/colors.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       home: Scaffold(
         body: IndexedStack(index: selected_index, children: list),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.orange.shade50,
+          backgroundColor: AppColors.bottomAppbarColor,
           currentIndex: selected_index,
           onTap: onItemTapped,
           items: const [

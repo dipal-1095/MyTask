@@ -8,6 +8,9 @@ class AppColors{
   static const Color backgroundColor=const Color(0xFFFFF8E1);
   static const Color buttonBackgroundColor=const Color(0xFFFFCA28);
   static const Color errorColor=const Color(0xFFF44336);
+  static const Color appBarColor=const Color(0xFFFFCA28);
+  static const Color bottomAppbarColor= const Color(0xFFFFF9C4);
+  static const Color photoBackgroundColor= const Color(0xFFE6EE9C);
   final orange=const Color(0xFFFFE0B2);
   const AppColors();
 }
